@@ -36,9 +36,9 @@
             </div>
           </div>
 
-          <textarea class="textarea" placeholder="e.g. Set Fire to the Rain - Adele" rows="15"></textarea>
+          <textarea id="txtinput" class="textarea" placeholder="e.g. Set Fire to the Rain - Adele" rows="15"></textarea>
 
-          <div class="buttons is-right mt-4">
+          <div id="regexbtn" class="buttons is-right mt-4" onclick="processText()">
             <button class="button">Regex</button>
           </div>
         </div>
@@ -46,7 +46,7 @@
           <p class="subtitle is-5 has-text-centered mb-5">Songs</p>
 
           <div class="control">
-            <textarea class="textarea" readonly rows=15></textarea>
+            <textarea id="output" class="textarea" readonly rows=15></textarea>
           </div>
 
           <div class="buttons is-right mt-4">
@@ -60,9 +60,21 @@
     </div>
   </section>
 
-
-
-
-
   </body>
 </html>
+
+
+
+<script>
+function processText() {
+  var txt = document.getElementById("txtinput").value;
+  document.getElementById("output").innerHTML = txt;
+  // alert(txt);
+  // console.log(txt);
+
+}
+
+
+</script>
+
+https://developer.spotify.com/documentation/general/guides/authorization-guide/
