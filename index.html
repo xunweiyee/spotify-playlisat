@@ -23,7 +23,10 @@
     <div class="container">
       <div class="columns is-vcentered">
         <div class="column is-half">
-          <div class="field is-horizontal">
+
+
+
+<!--           <div class="field is-horizontal">
             <div class="field-label is-normal">
               <label class="label">Regex</label>
             </div>
@@ -34,19 +37,78 @@
                 </p>
               </div>
             </div>
+          </div> -->
+
+          <textarea id="txtinput" onpaste="toOutput()" class="textarea" placeholder="e.g. Set Fire to the Rain - Adele" rows="15"></textarea>
+
+          <div class="columns mt-2">
+            <div class="column is-one-fifth">
+              <p class="">Split by</p>
+            </div>
+
+
+            <div class="column is-one-third">
+              <div class="control">
+                <label class="radio">
+                  <input id="space" type="radio" name="foobar" checked>
+                  Space
+                </label>
+                <label class="radio">
+                  <input id="tab" type="radio" name="foobar">
+                  Tab
+                </label>
+              </div>
+            </div>
+
+
+            <div class="column">
+              <label class="checkbox"><input type="checkbox" name="checkbox" value="1">1</label>
+            </div>
+            <div class="column">
+              <label class="checkbox"><input type="checkbox" name="checkbox" value="2">2</label>
+            </div>
+            <div class="column">
+              <label class="checkbox"><input type="checkbox" value="3">3</label>
+            </div>
+            <div class="column">
+              <label class="checkbox"><input type="checkbox" value="4">4</label>
+            </div>
+            <div class="column">
+              <label class="checkbox"><input type="checkbox" value="5">5</label>
+            </div>
           </div>
 
-          <textarea id="txtinput" class="textarea" placeholder="e.g. Set Fire to the Rain - Adele" rows="15"></textarea>
-
-          <div id="regexbtn" class="buttons is-right mt-4" onclick="processText()">
-            <button class="button">Regex</button>
+          <div class="field has-addons">
+            <div class="control is-expanded">
+              <input id="replaceTerm" class="input" type="text" placeholder="e.g. Artist">
+            </div>
+            <div class="control">
+              <button onclick="replaceText()" class="button is-info">
+                Replace
+              </button>
+            </div>
           </div>
+
+          <div id="regexbtn" class="buttons is-right">
+            <button class="button" onclick="removeLine()">empty lines</button>
+            <button class="button" onclick="removeNumber()">numbers</button>
+            <button class="button" onclick="removeSymbol()">symbols</button>
+            <button class="button" onclick="processText()">all</button>
+          </div>
+
+
+
+          <div id="regexbtn" class="buttons is-right">
+            <button class="button" onclick="toOutput()">Paste</button>
+            <button class="button is-danger is-left" onclick="clearText()">Clear</button>
+          </div>
+
         </div>
-        <div class="column is-half">
-          <p class="subtitle is-5 has-text-centered mb-5">Songs</p>
 
+        <div class="column is-half">
+          <!-- <p class="subtitle is-5 has-text-centered mb-5">Songs</p> -->
           <div class="control">
-            <textarea id="output" class="textarea" readonly rows=15></textarea>
+            <textarea id="output" class="textarea" readonly rows=23>test</textarea>
           </div>
 
           <div class="buttons is-right mt-4">
@@ -66,15 +128,116 @@
 
 
 <script>
-function processText() {
-  var txt = document.getElementById("txtinput").value;
-  document.getElementById("output").innerHTML = txt;
-  // alert(txt);
-  // console.log(txt);
 
-}
+  function toOutput() {
+    var txt = document.getElementById("txtinput").value;
+    document.getElementById("output").value = txt;
+  }
+
+  function clearText() {
+    document.getElementById("output").value = "";
+  }
+
+  function replaceText() {
+    var term = document.getElementById("replaceTerm").value;
+    var txt = document.getElementById("output").value;
+    txt = txt.replaceAll(term, "");
+    document.getElementById("output").value = txt;
+  }
+
+  function removeLine() {
+    var txt = document.getElementById("output").value;
+    txt = txt.replace(/^\s*[\r\n]/g, '');
+    // txt = txt.replace(/\t+/g, ' ');
+    txt = txt.replace(/  +/g, ' ');
+    document.getElementById("output").value = txt;
+  }
+
+  function removeNumber() {
+    var txt = document.getElementById("output").value;
+    txt = txt.replace(/\d+/g,'');
+    document.getElementById("output").value = txt;
+  }
+
+  function removeSymbol() {
+    var txt = document.getElementById("output").value;
+    txt = txt.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '')
+    document.getElementById("output").value = txt;
+  }
+
+  // function regexMatch() {
+  //   removeLine();
+
+  //   var lines = document.getElementById("output").value.split('\n');
+  //     for(var i = 0;i < lines.length;i++){
+  //       lines[i].match(/)
+  //     }
+  // }
+
+  var checkboxes = document.querySelectorAll("input[type=checkbox]");
+
+  for (var i=0, len=checkboxes.length; i<len; i++) {
+    if ( checkboxes[i].type === 'checkbox') {
+        checkboxes[i].onclick = function() {
+          // if(this.checked) {
+          //   alert(this.value);
+          // }
+          var checkboxesChecked = [];
+          // loop over them all
+          for (var i=0; i<checkboxes.length; i++) {
+             // And stick the checked ones onto an array...
+             if (checkboxes[i].checked) {
+                checkboxesChecked.push(checkboxes[i].value);
+             }
+          }
+          // alert(checkboxesChecked);
+          splitLine();
+
+
+
+        }
+    }
+  }
+
+  function splitLine() {
+    // alert("splitLine");
+
+    var separator = " "
+    if (document.getElementById('tab').checked) {
+      separator = "\t"
+    }
+
+    alert(separator)
+
+    var txt = document.getElementById("output").value;
+    lines = txt.match(/[^\r\n]+/g);
+    // alert(lines);
+    var output = [];
+    for (var i = lines.length - 1; i >= 0; i--) {
+      output.push(lines[i].split(separator));
+    }
+    // alert(output);
+
+    // document.getElementById("output").value = output;
+    // body...
+  }
+  
+
+
+
+
+  function spotifySearch(title) {
+    // body...
+  }
+
+
+
+
+
+
+
 
 
 </script>
 
-https://developer.spotify.com/documentation/general/guides/authorization-guide/
+<!-- https://developer.spotify.com/documentation/general/guides/authorization-guide/ -->
