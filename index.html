@@ -7,120 +7,142 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
   </head>
   <body>
-  <section class="section">
-    <div class="container">
-      <h1 class="title">
-        Spotify Playlist from Text
-      </h1>
-      <p class="subtitle">
-        Spotify playlist generator with regex.
-      </p>
-    </div>
-  </section>
 
+    <!-- title -->
+    <section class="section">
+      <div class="container">
+        <h1 class="title">
+          Spotify Playlist from Text
+        </h1>
+        <p class="subtitle">
+          Spotify playlist generator with regex.
+        </p>
+      </div>
+    </section>
 
-  <section>
-    <div class="container">
-      <div class="columns is-vcentered">
-        <div class="column is-half">
+    <section>
+      <div class="container">
+        <div class="columns is-vcentered">
+          <div class="column is-half">
 
+            <!-- input text area -->
+            <textarea id="txtinput" onpaste="toOutput()" class="textarea" placeholder="e.g. Set Fire to the Rain - Adele" rows="15"></textarea>
 
-
-<!--           <div class="field is-horizontal">
-            <div class="field-label is-normal">
-              <label class="label">Regex</label>
-            </div>
-            <div class="field-body">
-              <div class="field">
-                <p class="control">
-                  <input class="input" type="email" placeholder="e.g. %title% - %artist%">
-                </p>
+            <!-- split input -->
+            <div class="columns mt-2">
+              <div class="column is-one-fifth">
+                <p class="">Split input</p>
+              </div>
+              <!-- radio -->
+              <div class="column is-one-third">
+                <div class="control">
+                  <label class="radio">
+                    <input id="space" type="radio" name="foobar" checked>
+                    Space
+                  </label>
+                  <label class="radio">
+                    <input id="tab" type="radio" name="foobar">
+                    Tab
+                  </label>
+                </div>
+              </div>
+              <!-- checkbox -->
+              <div class="column">
+                <label class="checkbox"><input type="checkbox" value="0">1</label>
+              </div>
+              <div class="column">
+                <label class="checkbox"><input type="checkbox" value="1">2</label>
+              </div>
+              <div class="column">
+                <label class="checkbox"><input type="checkbox" value="2">3</label>
+              </div>
+              <div class="column">
+                <label class="checkbox"><input type="checkbox" value="3">4</label>
+              </div>
+              <div class="column">
+                <label class="checkbox"><input type="checkbox" value="4">5</label>
               </div>
             </div>
-          </div> -->
 
-          <textarea id="txtinput" onpaste="toOutput()" class="textarea" placeholder="e.g. Set Fire to the Rain - Adele" rows="15"></textarea>
-
-          <div class="columns mt-2">
-            <div class="column is-one-fifth">
-              <p class="">Split by</p>
-            </div>
-
-
-            <div class="column is-one-third">
+            <!-- replace text -->
+            <div class="field has-addons">
+              <div class="control is-expanded">
+                <input id="replaceTerm" class="input" type="text" placeholder="e.g. Artist">
+              </div>
               <div class="control">
-                <label class="radio">
-                  <input id="space" type="radio" name="foobar" checked>
-                  Space
-                </label>
-                <label class="radio">
-                  <input id="tab" type="radio" name="foobar">
-                  Tab
-                </label>
+                <button onclick="replaceText()" class="button is-info">
+                  Replace
+                </button>
               </div>
             </div>
 
+            <!-- buttons -->
+            <div id="regexbtn" class="buttons is-right">
+              <button class="button" onclick="removeLine()">empty lines</button>
+              <button class="button" onclick="removeNumber()">numbers</button>
+              <button class="button" onclick="removeSymbol()">symbols</button>
+              <button class="button" onclick="processText()">all</button>
+            </div>
 
-            <div class="column">
-              <label class="checkbox"><input type="checkbox" name="checkbox" value="1">1</label>
+            <!-- split output -->
+            <div class="columns mt-2">
+              <div class="column is-one-fifth">
+                <p class="">Split output</p>
+              </div>
+              <!-- radio -->
+              <div class="column is-one-third">
+                <div class="control">
+                  <label class="radio">
+                    <input id="spaceo" type="radio" name="group2" checked>
+                    Space
+                  </label>
+                  <label class="radio">
+                    <input id="tabo" type="radio" name="group2">
+                    Tab
+                  </label>
+                </div>
+              </div>
+              <!-- checkbox -->
+              <div class="column">
+                <label class="checkbox"><input type="checkbox" value="0">1</label>
+              </div>
+              <div class="column">
+                <label class="checkbox"><input type="checkbox" value="1">2</label>
+              </div>
+              <div class="column">
+                <label class="checkbox"><input type="checkbox" value="2">3</label>
+              </div>
+              <div class="column">
+                <label class="checkbox"><input type="checkbox" value="3">4</label>
+              </div>
+              <div class="column">
+                <label class="checkbox"><input type="checkbox" value="4">5</label>
+              </div>
+            </div>            
+
+            <!-- paste and clear -->
+            <div id="regexbtn" class="buttons is-right">
+              <button class="button" onclick="toOutput()">Paste</button>
+              <button class="button is-danger is-left" onclick="clearText()">Clear</button>
             </div>
-            <div class="column">
-              <label class="checkbox"><input type="checkbox" name="checkbox" value="2">2</label>
-            </div>
-            <div class="column">
-              <label class="checkbox"><input type="checkbox" value="3">3</label>
-            </div>
-            <div class="column">
-              <label class="checkbox"><input type="checkbox" value="4">4</label>
-            </div>
-            <div class="column">
-              <label class="checkbox"><input type="checkbox" value="5">5</label>
-            </div>
+
           </div>
 
-          <div class="field has-addons">
-            <div class="control is-expanded">
-              <input id="replaceTerm" class="input" type="text" placeholder="e.g. Artist">
-            </div>
+          <div class="column is-half">
+            <!-- output text area -->
             <div class="control">
-              <button onclick="replaceText()" class="button is-info">
-                Replace
-              </button>
+              <textarea id="output" class="textarea" readonly rows=22>test</textarea>
             </div>
+
+            <!-- spotify -->
+            <div class="buttons is-right mt-4">
+              <button class="button is-success">Generate Spotify Playlist</button>
+            </div>
+
           </div>
-
-          <div id="regexbtn" class="buttons is-right">
-            <button class="button" onclick="removeLine()">empty lines</button>
-            <button class="button" onclick="removeNumber()">numbers</button>
-            <button class="button" onclick="removeSymbol()">symbols</button>
-            <button class="button" onclick="processText()">all</button>
-          </div>
-
-
-
-          <div id="regexbtn" class="buttons is-right">
-            <button class="button" onclick="toOutput()">Paste</button>
-            <button class="button is-danger is-left" onclick="clearText()">Clear</button>
-          </div>
-
-        </div>
-
-        <div class="column is-half">
-          <!-- <p class="subtitle is-5 has-text-centered mb-5">Songs</p> -->
-          <div class="control">
-            <textarea id="output" class="textarea" readonly rows=23>test</textarea>
-          </div>
-
-          <div class="buttons is-right mt-4">
-            <button class="button is-success">Generate Spotify Playlist</button>
-          </div>
-
-
-
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
   </body>
 </html>
@@ -161,7 +183,7 @@
 
   function removeSymbol() {
     var txt = document.getElementById("output").value;
-    txt = txt.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '')
+    txt = txt.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, ' ')
     document.getElementById("output").value = txt;
   }
 
@@ -191,34 +213,35 @@
              }
           }
           // alert(checkboxesChecked);
-          splitLine();
-
-
+          splitLine(checkboxesChecked);
 
         }
     }
   }
 
-  function splitLine() {
-    // alert("splitLine");
+  function splitLine(checkboxesChecked) {
 
     var separator = " "
     if (document.getElementById('tab').checked) {
       separator = "\t"
     }
+    // alert(separator)
 
-    alert(separator)
-
-    var txt = document.getElementById("output").value;
+    var txt = document.getElementById("txtinput").value;
     lines = txt.match(/[^\r\n]+/g);
     // alert(lines);
-    var output = [];
-    for (var i = lines.length - 1; i >= 0; i--) {
-      output.push(lines[i].split(separator));
+    var output = "";
+    for (var i=0; i<lines.length; i++) {
+      line = lines[i].split(separator);
+      var temp = "";
+      for (var j=0; j<checkboxesChecked.length; j++) {
+        temp = temp + " " + line[checkboxesChecked[j]]
+      }
+      output = output + temp + "\n";
     }
     // alert(output);
 
-    // document.getElementById("output").value = output;
+    document.getElementById("output").value = output;
     // body...
   }
   
