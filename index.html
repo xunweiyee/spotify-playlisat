@@ -15,7 +15,7 @@
           Spotify Playlist from Text
         </h1>
         <p class="subtitle">
-          Spotify playlist generator with regex.
+          The easy way to auto-generate playlist.
         </p>
       </div>
     </section>
@@ -26,7 +26,7 @@
           <div class="column is-half">
 
             <!-- input text area -->
-            <textarea id="txtinput" onpaste="toOutput()" class="textarea" placeholder="e.g. Set Fire to the Rain - Adele" rows="15"></textarea>
+            <textarea id="inputText" onpaste="toOutput()" class="textarea" placeholder="e.g. Set Fire to the Rain - Adele" rows="15"></textarea>
 
             <!-- split input -->
             <div class="columns mt-2">
@@ -37,30 +37,30 @@
               <div class="column is-one-third">
                 <div class="control">
                   <label class="radio">
-                    <input id="space" type="radio" name="foobar" checked>
+                    <input id="space" type="radio" name="radio-in" checked>
                     Space
                   </label>
                   <label class="radio">
-                    <input id="tab" type="radio" name="foobar">
+                    <input id="tab" type="radio" name="radio-in">
                     Tab
                   </label>
                 </div>
               </div>
               <!-- checkbox -->
               <div class="column">
-                <label class="checkbox"><input type="checkbox" value="0">1</label>
+                <label class="checkbox"><input type="checkbox" name="cb-in" value="0">1</label>
               </div>
               <div class="column">
-                <label class="checkbox"><input type="checkbox" value="1">2</label>
+                <label class="checkbox"><input type="checkbox" name="cb-in" value="1">2</label>
               </div>
               <div class="column">
-                <label class="checkbox"><input type="checkbox" value="2">3</label>
+                <label class="checkbox"><input type="checkbox" name="cb-in" value="2">3</label>
               </div>
               <div class="column">
-                <label class="checkbox"><input type="checkbox" value="3">4</label>
+                <label class="checkbox"><input type="checkbox" name="cb-in" value="3">4</label>
               </div>
               <div class="column">
-                <label class="checkbox"><input type="checkbox" value="4">5</label>
+                <label class="checkbox"><input type="checkbox" name="cb-in" value="4">5</label>
               </div>
             </div>
 
@@ -93,45 +93,45 @@
               <div class="column is-one-third">
                 <div class="control">
                   <label class="radio">
-                    <input id="spaceo" type="radio" name="group2" checked>
+                    <input id="space-out" type="radio" name="radio-out" checked>
                     Space
                   </label>
                   <label class="radio">
-                    <input id="tabo" type="radio" name="group2">
+                    <input id="tab-out" type="radio" name="radio-out">
                     Tab
                   </label>
                 </div>
               </div>
               <!-- checkbox -->
               <div class="column">
-                <label class="checkbox"><input type="checkbox" value="0">1</label>
+                <label class="checkbox"><input type="checkbox" name="cb-out" value="0">1</label>
               </div>
               <div class="column">
-                <label class="checkbox"><input type="checkbox" value="1">2</label>
+                <label class="checkbox"><input type="checkbox" name="cb-out" value="1">2</label>
               </div>
               <div class="column">
-                <label class="checkbox"><input type="checkbox" value="2">3</label>
+                <label class="checkbox"><input type="checkbox" name="cb-out" value="2">3</label>
               </div>
               <div class="column">
-                <label class="checkbox"><input type="checkbox" value="3">4</label>
+                <label class="checkbox"><input type="checkbox" name="cb-out" value="3">4</label>
               </div>
               <div class="column">
-                <label class="checkbox"><input type="checkbox" value="4">5</label>
+                <label class="checkbox"><input type="checkbox" name="cb-out" value="4">5</label>
               </div>
-            </div>            
+            </div>     
 
             <!-- paste and clear -->
             <div id="regexbtn" class="buttons is-right">
-              <button class="button" onclick="toOutput()">Paste</button>
+              <button class="button" onclick="pasteText()">Paste</button>
               <button class="button is-danger is-left" onclick="clearText()">Clear</button>
             </div>
 
           </div>
 
           <div class="column is-half">
-            <!-- output text area -->
+            <!-- outputText text area -->
             <div class="control">
-              <textarea id="output" class="textarea" readonly rows=22>test</textarea>
+              <textarea id="outputText" class="textarea" readonly rows=22>test</textarea>
             </div>
 
             <!-- spotify -->
@@ -151,59 +151,78 @@
 
 <script>
 
-  function toOutput() {
-    var txt = document.getElementById("txtinput").value;
-    document.getElementById("output").value = txt;
+  function toOutput(txt=document.getElementById("inputText").value) {
+    document.getElementById("outputText").value = txt;
+    currOutputText = document.getElementById("outputText").value;
+  }
+
+  function pasteText() {
+    var checkboxesIn = document.querySelectorAll("input[name=cb-in]");
+    for (i=0; i<checkboxesIn.length; i++) {
+        checkboxesIn[i].checked = true;
+    }
+
+    toOutput();
   }
 
   function clearText() {
-    document.getElementById("output").value = "";
+    var checkboxesIn = document.querySelectorAll("input[name=cb-in]");
+    for (i=0; i<checkboxesIn.length; i++) {
+        checkboxesIn[i].checked = false;
+    }
+
+    toOutput("");
   }
 
   function replaceText() {
     var term = document.getElementById("replaceTerm").value;
-    var txt = document.getElementById("output").value;
+    var txt = document.getElementById("outputText").value;
     txt = txt.replaceAll(term, "");
-    document.getElementById("output").value = txt;
+
+    toOutput(txt);
   }
 
   function removeLine() {
-    var txt = document.getElementById("output").value;
+    var txt = document.getElementById("outputText").value;
     txt = txt.replace(/^\s*[\r\n]/g, '');
     // txt = txt.replace(/\t+/g, ' ');
     txt = txt.replace(/  +/g, ' ');
-    document.getElementById("output").value = txt;
+
+    toOutput(txt);
   }
 
   function removeNumber() {
-    var txt = document.getElementById("output").value;
+    var txt = document.getElementById("outputText").value;
     txt = txt.replace(/\d+/g,'');
-    document.getElementById("output").value = txt;
+
+    toOutput(txt);
   }
 
   function removeSymbol() {
-    var txt = document.getElementById("output").value;
+    var txt = document.getElementById("outputText").value;
     txt = txt.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, ' ')
-    document.getElementById("output").value = txt;
+
+    toOutput(txt);
   }
 
-  // function regexMatch() {
-  //   removeLine();
-
-  //   var lines = document.getElementById("output").value.split('\n');
-  //     for(var i = 0;i < lines.length;i++){
-  //       lines[i].match(/)
-  //     }
-  // }
-
-  var checkboxes = document.querySelectorAll("input[type=checkbox]");
-
+  // checkboxes to split input
+  var checkboxesIn = document.querySelectorAll("input[name=cb-in]");
+  checkboxes = checkboxesIn;
   for (var i=0, len=checkboxes.length; i<len; i++) {
+    getCb(checkboxes, i);
+  }
+
+  var checkboxesOut = document.querySelectorAll("input[name=cb-out]");
+  checkboxes = checkboxesOut;
+  currOutputText = "";
+  // currOutputText = document.getElementById("outputText").value;
+  for (var i=0, len=checkboxes.length; i<len; i++) {
+    getCb(checkboxes, i, true);
+  }
+
+  function getCb(checkboxes, i, output=false) {
     if ( checkboxes[i].type === 'checkbox') {
         checkboxes[i].onclick = function() {
-          // if(this.checked) {
-          //   alert(this.value);
-          // }
           var checkboxesChecked = [];
           // loop over them all
           for (var i=0; i<checkboxes.length; i++) {
@@ -213,36 +232,46 @@
              }
           }
           // alert(checkboxesChecked);
-          splitLine(checkboxesChecked);
 
+          splitLine(checkboxesChecked, output);
         }
     }
   }
 
-  function splitLine(checkboxesChecked) {
+  function splitLine(checkboxesChecked, output) {
+    var tabRadioId = "tab";
+    var inputAreaId = "inputText";
+    var txt = document.getElementById(inputAreaId).value;
+
+    if (output) {
+      tabRadioId = "tab-out";
+      inputAreaId = "outputText";
+      txt = currOutputText;
+    }
 
     var separator = " "
-    if (document.getElementById('tab').checked) {
+    if (document.getElementById(tabRadioId).checked) {
       separator = "\t"
     }
     // alert(separator)
 
-    var txt = document.getElementById("txtinput").value;
     lines = txt.match(/[^\r\n]+/g);
-    // alert(lines);
-    var output = "";
+    // alert(checkboxesChecked);
+    var outputText = "";
     for (var i=0; i<lines.length; i++) {
       line = lines[i].split(separator);
       var temp = "";
       for (var j=0; j<checkboxesChecked.length; j++) {
         temp = temp + " " + line[checkboxesChecked[j]]
       }
-      output = output + temp + "\n";
+      outputText = outputText + temp + "\n";
     }
-    // alert(output);
-
-    document.getElementById("output").value = output;
-    // body...
+    // alert(outputText);
+    if (output==true) {
+      document.getElementById("outputText").value = outputText;
+    } else {
+      toOutput(outputText);
+    }
   }
   
 
