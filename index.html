@@ -289,84 +289,13 @@
 
 
 
-  redirectUri = "file:///media/home/project/spotify_playlist/index.html";
+  redirectUri = "https://xunweiyee.github.io/spotify-playlist/redirect";
 
   url = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=user-read-private%20user-read-email&response_type=token&state=123`;
   console.log(url);
 
 
   // https://accounts.spotify.com/authorize?client_id=5fe01282e94241328a84e7c5cc169164&redirect_uri=http:%2F%2Fexample.com%2Fcallback&scope=user-read-private%20user-read-email&response_type=token&state=123
-
-
-        // const result = fetch('https://accounts.spotify.com/api/token', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type' : 'application/x-www-form-urlencoded', 
-        //         'Authorization' : 'Basic ' + btoa(clientId + ':' + clientSecret)
-        //     },
-        //     body: 'grant_type=client_credentials'
-        // });
-
-        // // const data = result.json();
-        // console.log(result)
-        // // return data.access_token;
-        // Enable CORS globally for any host
-
-// var corsAttr = new EnableCorsAttribute("*", "*", "*");
-// config.EnableCors(corsAttr);
-
-https://accounts.spotify.com/authorize?client_id=28ee156b49b…read-private%20user-read-email&response_type=token&state=123
-
-
-
-var http_request;
-http_request = new XMLHttpRequest();
-http_request.onreadystatechange = function () { console.log("ready") };
-http_request.open("GET", url);
-http_request.withCredentials = true;
-http_request.setRequestHeader("Content-Type", "application/json");
-http_request.setRequestHeader("Access-Control-Allow-Origin", "*");
-// http_request.send();
-http_request.send({ 'request': "authentication token" });
-
-// result = fetch(url);
-// console.log(result)
-
-  
-  // const Http = new XMLHttpRequest();
-  // // const url='https://accounts.spotify.com/authorize';
-  // Http.open("GET", url);
-  // Http.send();
-
-  // Http.onreadystatechange = (e) => {
-  //   console.log(Http.responseText)
-  // }
-
-
-// GET https://accounts.spotify.com/authorize
-
-//   var spotifyApi = new SpotifyWebApi();
-
-//   token = spotifyApi.getAccessToken();
-//   console.log(token)
-
-  // // get Elvis' albums, passing a callback. When a callback is passed, no Promise is returned
-  // spotifyApi.getArtistAlbums('43ZHCT0cAZBISjO8DG9PnE', function (err, data) {
-  //   if (err) console.error(err);
-  //   else console.log('Artist albums', data);
-  // });
-
-  // // get Elvis' albums, using Promises through Promise, Q or when
-  // spotifyApi.getArtistAlbums('43ZHCT0cAZBISjO8DG9PnE').then(
-  //   function (data) {
-  //     console.log('Artist albums', data);
-  //   },
-  //   function (err) {
-  //     console.error(err);
-  //   }
-  // );
-
-
 
 
 
