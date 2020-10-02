@@ -27,7 +27,7 @@
           <div class="column is-half">
 
             <!-- input text area -->
-            <textarea id="inputText" onpaste="toOutput()" class="textarea" placeholder="e.g. Set Fire to the Rain - Adele" rows="15"></textarea>
+            <textarea id="inputText" class="textarea" placeholder="e.g. Set Fire to the Rain - Adele" rows="15"></textarea>
 
             <!-- split input -->
             <div class="columns mt-2">
@@ -132,7 +132,7 @@
           <div class="column is-half">
             <!-- outputText text area -->
             <div class="control">
-              <textarea id="outputText" class="textarea" readonly rows=24>test</textarea>
+              <textarea id="outputText" class="textarea" readonly rows=24></textarea>
             </div>
 
             <!-- spotify -->
@@ -151,19 +151,30 @@
 
 
 <script>
+  let inputTa = document.getElementById("inputText");
+  inputTa.onpaste = pasteText;
 
   function toOutput(txt=document.getElementById("inputText").value) {
     document.getElementById("outputText").value = txt;
     currOutputText = document.getElementById("outputText").value;
   }
 
-  function pasteText() {
+  function pasteText(event) {
     var checkboxesIn = document.querySelectorAll("input[name=cb-in]");
     for (i=0; i<checkboxesIn.length; i++) {
         checkboxesIn[i].checked = true;
     }
 
-    toOutput();
+    setTimeout(getInput, 100);
+
+    function getInput(){ 
+      let txt = document.getElementById("inputText").value;
+      toOutput(txt);
+    }
+
+    // alert(txt);
+    //setTimeout(function(){ alert("Hello"); }, 3000);
+    // toOutput(txt);
   }
 
   function clearText() {
@@ -260,7 +271,8 @@
     // alert(checkboxesChecked);
     var outputText = "";
     for (var i=0; i<lines.length; i++) {
-      line = lines[i].split(separator);
+      line = lines[i].trim()
+      line = line.split(separator);
       var temp = "";
       for (var j=0; j<checkboxesChecked.length; j++) {
         temp = temp + " " + line[checkboxesChecked[j]]
