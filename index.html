@@ -27,12 +27,12 @@
           <div class="column is-half">
 
             <!-- input text area -->
-            <textarea id="inputText" class="textarea" placeholder="e.g. Set Fire to the Rain - Adele" rows="15"></textarea>
+            <textarea id="inputText" class="textarea mb-5" placeholder="e.g. Set Fire to the Rain - Adele" rows="15"></textarea>
 
             <!-- split input -->
-            <div class="columns mt-2">
+            <div class="columns">
               <div class="column is-one-fifth">
-                <p class="">Split input</p>
+                <p class="">Split input by</p>
               </div>
               <!-- radio -->
               <div class="column is-one-third">
@@ -77,18 +77,26 @@
               </div>
             </div>
 
-            <!-- buttons -->
-            <div id="regexbtn" class="buttons is-right">
-              <button class="button" onclick="removeLine()">empty lines</button>
-              <button class="button" onclick="removeNumber()">numbers</button>
-              <button class="button" onclick="removeSymbol()">symbols</button>
-              <button class="button" onclick="processText()">all</button>
-            </div>
+            <div class="columns">
+              <div class="column is-one-fifth">
+                <p class="">Remove</p>
+              </div>
+
+				<div class="column is-right">
+				<!-- buttons -->
+				<div id="regexbtn" class="buttons is-right">
+				  <button class="button" onclick="removeLine()">empty lines</button>
+				  <button class="button" onclick="removeNumber()">numbers</button>
+				  <button class="button" onclick="removeSymbol()">symbols</button>
+				  <button class="button" onclick="removeAll()">all</button>
+				</div>
+				</div>
+	        </div>	
 
             <!-- split output -->
             <div class="columns mt-2">
               <div class="column is-one-fifth">
-                <p class="">Split output</p>
+                <p class="">Split output by</p>
               </div>
               <!-- radio -->
               <div class="column is-one-third">
@@ -123,16 +131,45 @@
 
             <!-- paste and clear -->
             <div id="regexbtn" class="buttons is-right">
-              <button class="button" onclick="pasteText()">Paste</button>
+              <button class="button" onclick="pasteText()">Paste Again</button>
               <button class="button is-danger is-left" onclick="clearText()">Clear</button>
             </div>
 
           </div>
 
+
+
+
           <div class="column is-half">
             <!-- outputText text area -->
-            <div class="control">
-              <textarea id="outputText" class="textarea" readonly rows=24></textarea>
+            <!-- <div class="control mb-2"> -->
+              <textarea id="outputText" class="textarea mb-5" readonly rows=18></textarea>
+            <!-- </div> -->
+
+            <!-- get user id -->
+            <div class="field has-addons">
+              <div class="control is-expanded">
+                <input id="gotUserId" class="input" type="text" placeholder="e.g. Artist">
+              </div>
+              <div class="control">
+                <button onclick="window.open('https://www.spotify.com/account/?utm_source=spotify&utm_medium=menu&utm_campaign=your_account','_blank')" class="button is-info" type="button">
+                  Get User Id
+                </button>
+              </div>
+            </div>
+
+            <!-- get token -->
+            <div class="field has-addons">
+              <div class="control is-expanded">
+                <input id="getToken" class="input" type="text" placeholder="BQBmM7XYpqQ3KwB7YQnv1ntLQxd-k3g3qiZcdeVjDsabPyD0Mg7HOjr-UUEcDVmwFPyR_5E9httGp6XUALcH4qygaDPKOg_q0lkyDapk_o0l0_UCMG6qFqX5KLV-Of_YCG9mOT-3XmqWy_IB4hT3mmW4UxfZCbKWc1KYUVr0AtzSARFyRN0unF5Xm268fct7dmFf8A">
+              </div>
+              <div class="control">
+              	<!-- https://developer.spotify.com/console/post-playlist-tracks/?playlist_id=&position=&uris= -->
+              	<!-- window.open('http://google.com','_blank') -->
+                <button onclick="window.open('https://developer.spotify.com/console/post-playlist-tracks/?playlist_id=&position=&uris=','_blank')" class="button is-info" type="button">
+                  Get Token
+                </button>
+              </div>
             </div>
 
             <!-- spotify -->
@@ -217,6 +254,16 @@
     toOutput(txt);
   }
 
+  function removeAll() {
+  	removeLine()
+  	removeNumber()
+  	removeSymbol()
+  }
+
+  function setToken() {
+
+  }
+
   // checkboxes to split input
   var checkboxesIn = document.querySelectorAll("input[name=cb-in]");
   checkboxes = checkboxesIn;
@@ -287,12 +334,13 @@
     }
   }
 
+  var spotifyApi = new SpotifyWebApi();
 
 
-  redirectUri = "https://xunweiyee.github.io/spotify-playlist";
+  // redirectUri = "https://xunweiyee.github.io/spotify-playlist";
 
-  url = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=user-read-private%20user-read-email&response_type=token&state=123`;
-  console.log(url);
+  // url = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=user-read-private%20user-read-email&response_type=token&state=123`;
+  console.log(spotifyApi);
 
 
   // https://accounts.spotify.com/authorize?client_id=5fe01282e94241328a84e7c5cc169164&redirect_uri=http:%2F%2Fexample.com%2Fcallback&scope=user-read-private%20user-read-email&response_type=token&state=123
