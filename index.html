@@ -6,6 +6,7 @@
     <title>Spotify Playlist from Text</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
     <script type="text/javascript" src="spotify-web-api.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   </head>
   <body>
 
@@ -149,7 +150,7 @@
             <!-- get user id -->
             <div class="field has-addons">
               <div class="control is-expanded">
-                <input id="gotUserId" class="input" type="text" placeholder="e.g. Artist">
+                <input id="getUserId" class="input" type="text" placeholder="e.g. Artist">
               </div>
               <div class="control">
                 <button onclick="window.open('https://www.spotify.com/account/?utm_source=spotify&utm_medium=menu&utm_campaign=your_account','_blank')" class="button is-info" type="button">
@@ -174,7 +175,7 @@
 
             <!-- spotify -->
             <div class="buttons is-right mt-4">
-              <button class="button is-success">Generate Spotify Playlist</button>
+              <button id="generatePlaylist" class="button is-success">Generate Spotify Playlist</button>
             </div>
 
           </div>
@@ -334,13 +335,110 @@
     }
   }
 
-  var spotifyApi = new SpotifyWebApi();
+    // $(document).ready(function(){
+    //   $("#generatePlaylist").click(function(){
+    //     $(this).hide();
+    //   });
+    // });
+    // var data = {};
+
+    // var token = document.getElementById("getToken").value;
+    // var user_id = document.getElementById("getUserId").value;
+
+    // var url = "https://api.spotify.com/v1/users/" + user_id + "/playlists"
+
+
+    $("#generatePlaylist").click(function(){
+        var token = document.getElementById("getToken").value;
+        var user_id = document.getElementById("getUserId").value;
+
+        var url = "https://api.spotify.com/v1/users/" + user_id + "/playlists"
+        // var url = "https://api.spotify.com/v1/search?q="+"set fire"+"&type=track"
+
+
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: "{\"name\":\"hi from html\",\"description\":\"New playlist description\",\"public\":false}",
+            // data: {
+            //   "name": "hi",
+            //   // "description": "New playlist description",
+            //   // "public": false
+            // },
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            dataType: 'json',
+            success:function(response)
+            {
+                console.log("Success!!" + response.responseText);
+                // var parsed_data = JSON.parse(response.responseText);
+                // console.log(parsed_data.success);
+            },
+            error : function(xhr, status, error)
+            {
+                console.log("Status of error message" + status + "Error is" + error);
+            } 
+        });
+
+
+      // $.get("demo_test.asp", function(data, status){
+        // alert("Data: " + token);
+      // });
+    }); 
+
+
+
+
+
+
+
+
+    // $("#generatePlaylist").click(function(){
+    //     var token = document.getElementById("getToken").value;
+    //     var user_id = document.getElementById("getUserId").value;
+
+    //     var url = "https://api.spotify.com/v1/users/" + user_id + "/playlists"
+
+    //     $.post(url,  // url
+    //        { Authorization: token , Name: "New"}, // data to be submit
+    //        headers: {"X-Test-Header": "test-value"}
+    //        function(data, status, xhr) {   // success callback function
+    //                 alert('status: ' + status + ', data: ' + data.responseData);
+    //             },
+    //        'json'); // response data format
+
+
+      // $.get("demo_test.asp", function(data, status){
+        // alert("Data: " + token);
+      // });
+    // }); 
+
+
+  // const Http = new XMLHttpRequest();
+  //   const url='https://jsonplaceholder.typicode.com/posts';
+  //   Http.open("GET", url);
+  //   Http.send();
+
+  //   Http.onreadystatechange = (e) => {
+  //     console.log(Http.responseText)
+  //   }
+
+
+
+
+
+
+
+  // var spotifyApi = new SpotifyWebApi();
 
 
   // redirectUri = "https://xunweiyee.github.io/spotify-playlist";
 
   // url = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=user-read-private%20user-read-email&response_type=token&state=123`;
-  console.log(spotifyApi);
+  // console.log(spotifyApi);
 
 
   // https://accounts.spotify.com/authorize?client_id=5fe01282e94241328a84e7c5cc169164&redirect_uri=http:%2F%2Fexample.com%2Fcallback&scope=user-read-private%20user-read-email&response_type=token&state=123
