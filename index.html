@@ -347,33 +347,31 @@
 
     // var url = "https://api.spotify.com/v1/users/" + user_id + "/playlists"
 
+    function getId() {
+      var myRe = /"id":"(.*?)"/;
+      var myArray = myRe.exec(songs);
+      console.log(myArray['1']);
+    }
 
-    $("#generatePlaylist").click(function(){
-        var token = document.getElementById("getToken").value;
-        var user_id = document.getElementById("getUserId").value;
-
-        var url = "https://api.spotify.com/v1/users/" + user_id + "/playlists"
-        // var url = "https://api.spotify.com/v1/search?q="+"set fire"+"&type=track"
-
+    function createNewPlaylist(token, userId, title="created new playlist") {
+        var url = "https://api.spotify.com/v1/users/" + userId + "/playlists";
+        var result;
 
         $.ajax({
             url: url,
             type: 'post',
-            data: "{\"name\":\"hi from html\",\"description\":\"New playlist description\",\"public\":false}",
-            // data: {
-            //   "name": "hi",
-            //   // "description": "New playlist description",
-            //   // "public": false
-            // },
+            data: "{\"name\":\"" + title + "\",\"description\":\"\",\"public\":false}",
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
                 "Authorization": "Bearer " + token
             },
             dataType: 'json',
+            async: false, 
             success:function(response)
             {
-                console.log("Success!!" + response.responseText);
+              result = response;
+                // console.log("Success!!" + response.responseText);
                 // var parsed_data = JSON.parse(response.responseText);
                 // console.log(parsed_data.success);
             },
@@ -382,11 +380,71 @@
                 console.log("Status of error message" + status + "Error is" + error);
             } 
         });
+        stringData = JSON.stringify(result).replace("index.html:367:23", "");
+        parsedData = JSON.parse(stringData);
+        alert(stringData);
+    }
+
+    function searchSongs(token, term) {
+      var url = "https://api.spotify.com/v1/search?q="+ term +"&type=track";
+      var result;
+
+      var data = $.ajax({
+          url: url,
+          type: 'get',
+          headers: {
+              "Accept": "application/json",
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + token
+          },
+          dataType: 'json',
+          async: false, 
+          success:function(response)
+          {
+            result = response
+              // console.log("Success!!" + JSON.stringify(response));
+              // stringData = JSON.stringify(response).replace("index.html:367:23", "");
+              // parsedData = JSON.parse(stringData);
+              // console.log(parsedData.tracks.total);
+
+          },
+          error : function(xhr, status, error)
+          {
+              console.log("Status of error message" + status + "Error is" + error);
+          } 
+      });
+      stringData = JSON.stringify(result).replace("index.html:367:23", "");
+      parsedData = JSON.parse(stringData);
+      // alert(stringData);
 
 
-      // $.get("demo_test.asp", function(data, status){
-        // alert("Data: " + token);
-      // });
+      if (parsedData.tracks.total > 0) {
+        // console.log(stringData)
+        return stringData
+      }
+      return ""
+    }
+
+
+    $("#generatePlaylist").click(function(){
+      var token = document.getElementById("getToken").value;
+      var userId = document.getElementById("getUserId").value;
+
+      var today = new Date();
+      var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+
+      createNewPlaylist(token, userId)
+
+      // var songs = searchSongs("ru yan");
+
+      // var myRe = /"id":"(.*?)"/;
+      // var myArray = myRe.exec(songs);
+      // console.log(myArray['1'])
+
+
+
+
+
     }); 
 
 
