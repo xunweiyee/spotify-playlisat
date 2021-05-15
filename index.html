@@ -212,6 +212,7 @@
 
 
 <script>
+  // Text Processing
   let inputTa = document.getElementById("inputText");
   inputTa.onpaste = pasteText;
 
@@ -284,9 +285,6 @@
   	removeSymbol()
   }
 
-  function setToken() {
-
-  }
 
   // checkboxes to split input
   var checkboxesIn = document.querySelectorAll("input[name=cb-in]");
@@ -358,63 +356,26 @@
     }
   }
 
-    // $(document).ready(function(){
-    //   $("#generatePlaylist").click(function(){
-    //     $(this).hide();
-    //   });
-    // });
-    // var data = {};
 
-    // var token = document.getElementById("token").value;
-    // var user_id = document.getElementById("userId").value;
 
-    // var url = "https://api.spotify.com/v1/users/" + user_id + "/playlists"
 
-    function getId(string) {
-      var myRe = /"id":"(.*?)"/;
-      var myArray = myRe.exec(string);
-      // console.log(myArray['1']);
-      return myArray['1']
-    }
+  // Spotify API
 
-    function createNewPlaylist(token, userId, title) {
-        var url = "https://api.spotify.com/v1/users/" + userId + "/playlists";
-        var result;
+  function getId(string) {
+    var myRe = /"id":"(.*?)"/;
+    var myArray = myRe.exec(string);
+    // console.log(myArray['1']);
+    return myArray['1']
+  }
 
-        $.ajax({
-            url: url,
-            type: 'post',
-            data: "{\"name\":\"" + title + "\",\"description\":\"\",\"public\":false}",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + token
-            },
-            dataType: 'json',
-            async: false, 
-            success:function(response)
-            {
-              result = response;
-              console.log("New playlist created");
-              // console.log("Success!!" + JSON.stringify(response));
-            },
-            error : function(xhr, status, error)
-            {
-              console.log("Status of error message" + status + "Error is" + error);
-            } 
-        });
-        stringData = JSON.stringify(result).replace("index.html:367:23", "");
-        parsedData = JSON.parse(stringData);
-        return getId(stringData)
-    }
-
-    function searchSongs(token, term) {
-      var url = "https://api.spotify.com/v1/search?q="+ term +"&type=track";
+  function createNewPlaylist(token, userId, title) {
+      var url = "https://api.spotify.com/v1/users/" + userId + "/playlists";
       var result;
 
-      var data = $.ajax({
+      $.ajax({
           url: url,
-          type: 'get',
+          type: 'post',
+          data: "{\"name\":\"" + title + "\",\"description\":\"\",\"public\":false}",
           headers: {
               "Accept": "application/json",
               "Content-Type": "application/json",
@@ -424,9 +385,9 @@
           async: false, 
           success:function(response)
           {
-            result = response
-            console.log("Searched for " + term);
-            console.log(JSON.stringify(result))
+            result = response;
+            console.log("New playlist created");
+            // console.log("Success!!" + JSON.stringify(response));
           },
           error : function(xhr, status, error)
           {
@@ -435,69 +396,99 @@
       });
       stringData = JSON.stringify(result).replace("index.html:367:23", "");
       parsedData = JSON.parse(stringData);
+      return getId(stringData)
+  }
 
-      if (parsedData.tracks.total > 0) {
-        var myRe = /spotify:track:(.*?)"/;
-        var myArray = myRe.exec(stringData);
-        return myArray['1'];
-      }
-      return false
-    }
+  function searchSongs(token, term) {
+    var url = "https://api.spotify.com/v1/search?q="+ term +"&type=track";
+    var result;
 
-    function addSongToPlaylist(token, playlistId, songId) {
-      var url = "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks?uris=spotify:track:" + songId
-      console.log(songId)
-      https://open.spotify.com/track/65a2uxQevvKhIvhJ3r0mzh?si=235f0207163d414c
-      var result;
-
-      var data = $.ajax({
-          url: url,
-          type: 'post',
-          headers: {
+    var data = $.ajax({
+        url: url,
+        type: 'get',
+        headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
             "Authorization": "Bearer " + token
-          },
-          dataType: 'json',
-          async: false, 
-          success:function(response)
-          {
-            result = response
-            console.log("Successfully added track!");
-          },
-          error : function(xhr, status, error)
-          {
-            console.log("Status of error message" + status + "Error is" + error);
-          } 
-      });
+        },
+        dataType: 'json',
+        async: false, 
+        success:function(response)
+        {
+          result = response
+          console.log("Searched for " + term);
+          console.log(JSON.stringify(result))
+        },
+        error : function(xhr, status, error)
+        {
+          console.log("Status of error message" + status + "Error is" + error);
+        } 
+    });
+    stringData = JSON.stringify(result).replace("index.html:367:23", "");
+    parsedData = JSON.parse(stringData);
+
+    if (parsedData.tracks.total > 0) {
+      var myRe = /spotify:track:(.*?)"/;
+      var myArray = myRe.exec(stringData);
+      return myArray['1'];
+    }
+    return false
+  }
+
+  function addSongToPlaylist(token, playlistId, songId) {
+    var url = "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks?uris=spotify:track:" + songId
+    console.log(songId)
+    https://open.spotify.com/track/65a2uxQevvKhIvhJ3r0mzh?si=235f0207163d414c
+    var result;
+
+    var data = $.ajax({
+        url: url,
+        type: 'post',
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token
+        },
+        dataType: 'json',
+        async: false, 
+        success:function(response)
+        {
+          result = response
+          console.log("Successfully added track!");
+        },
+        error : function(xhr, status, error)
+        {
+          console.log("Status of error message" + status + "Error is" + error);
+        } 
+    });
+  }
+
+
+  $("#generatePlaylist").click(function(){
+    var token = document.getElementById("token").value;
+    var userId = document.getElementById("userId").value;
+    var playlistTitle = document.getElementById("playlistTitle").value;
+
+    var today = new Date();
+    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date + ' ' + time;
+
+    if (playlistTitle.length == 0) {
+      playlistTitle = dateTime;
     }
 
+    playlistId = createNewPlaylist(token, userId, playlistTitle);
 
-    $("#generatePlaylist").click(function(){
-      var token = document.getElementById("token").value;
-      var userId = document.getElementById("userId").value;
-      var playlistTitle = document.getElementById("playlistTitle").value;
+    var txt = document.getElementById("outputText").value;
+    lines = txt.split("\n");
 
-      var today = new Date();
-      var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-      var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      var dateTime = date + ' ' + time;
-
-      if (playlistTitle.length == 0) {
-        playlistTitle = dateTime;
+    for (i in lines) {
+      songId = searchSongs(token, lines[i]);
+      if (songId != false) {
+        addSongToPlaylist(token, playlistId, songId)
       }
-
-      playlistId = createNewPlaylist(token, userId, playlistTitle);
-
-      var txt = document.getElementById("outputText").value;
-      lines = txt.split("\n");
-
-      for (i in lines) {
-        songId = searchSongs(token, lines[i]);
-        if (songId != false) {
-          addSongToPlaylist(token, playlistId, songId)
-        }
-      }
-    }); 
+    }
+  }); 
 
 </script>
