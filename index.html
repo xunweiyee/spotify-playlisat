@@ -27,7 +27,7 @@
           <div class="column is-half">
 
             <!-- input text area -->
-            <textarea id="inputText" class="textarea mb-5" placeholder="e.g. Set Fire to the Rain - Adele" rows="15"></textarea>
+            <textarea id="inputText" class="textarea mb-5" placeholder="e.g. Set Fire to the Rain - Adele" rows="14"></textarea>
 
             <!-- split input -->
             <div class="columns">
@@ -73,6 +73,18 @@
               <div class="control">
                 <button onclick="replaceText()" class="button is-info">
                   Replace
+                </button>
+              </div>
+            </div>
+
+            <!-- add text -->
+            <div class="field has-addons">
+              <div class="control is-expanded">
+                <input id="addTerm" class="input" type="text" placeholder="e.g. Artist">
+              </div>
+              <div class="control">
+                <button onclick="addText()" class="button is-info">
+                  Add to every line
                 </button>
               </div>
             </div>
@@ -143,7 +155,7 @@
           <div class="column is-half">
             <!-- outputText text area -->
             <!-- <div class="control mb-2"> -->
-              <textarea id="outputText" class="textarea mb-5" readonly rows=18></textarea>
+            <textarea id="outputText" class="textarea mb-5" readonly rows=18></textarea>
             <!-- </div> -->
 <!-- 
             <div class="field has-addons">
@@ -201,9 +213,37 @@
               <button id="generatePlaylist" class="button is-success is-medium is-outlined">Generate Spotify Playlist</button>
             </div>
 
+            <!-- <textarea id="outputText" class="textarea mb-5" readonly rows=10></textarea> -->
+
           </div>
         </div>
       </div>
+    </section>
+
+
+    <section class="section">
+      <div class="columns">
+        <div class="tile is-3"></div>
+
+        <div class="tile is-ancestor">
+          <div class="tile is-4 is-parent">
+            <div id="resultText" class="tile is-child box">
+<!--               <p class="title">One</p>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.</p> -->
+            </div>
+
+          </div>
+          <div class="tile is-6 is-parent">
+            <div id="resultSpotify" class="tile is-child box">
+<!--               <p class="title">Three</p>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam semper diam at erat pulvinar, at pulvinar felis blandit. Vestibulum volutpat tellus diam, consequat gravida libero rhoncus ut. Morbi maximus, leo sit amet vehicula eleifend, nunc dui porta orci, quis semper odio felis ut quam.</p> -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
     </section>
 
   </body>
@@ -258,7 +298,8 @@
 
   function removeLine() {
     var txt = document.getElementById("outputText").value;
-    txt = txt.replace(/^\s*[\r\n]/g, '');
+    txt = txt.replaceAll("\n\n", '\n');
+    // txt = txt.replace(/^\s*[\r<br>]/g, '');
     // txt = txt.replace(/\t+/g, ' ');
     txt = txt.replace(/  +/g, ' ');
 
@@ -283,6 +324,15 @@
   	removeLine()
   	removeNumber()
   	removeSymbol()
+  }
+
+  function addText() {
+    var txt = document.getElementById("outputText").value;
+    var term = document.getElementById("addTerm").value;
+
+    txt = term + " " + txt.replaceAll("\n", "\n" + term + " ")
+
+    toOutput(txt);
   }
 
 
@@ -368,6 +418,55 @@
     return myArray['1']
   }
 
+  function getName(string) {
+    var myRe = /"name":"(.*?)"/g;
+    var myArray = [...string.matchAll(myRe)];
+    // var myArray = myRe.exec(string);
+    // console.log(myArray['1']);
+    for (i in myArray) {
+      myArray[i] = myArray[i][1]
+    }
+    return [myArray[myArray.length-2], myArray[myArray.length-1]]
+  }
+
+  function getTrack(token, songId) {
+    var url = "https://api.spotify.com/v1/tracks/" + songId;
+    var result;
+
+    var data = $.ajax({
+        url: url,
+        type: 'get',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+        dataType: 'json',
+        async: false, 
+        success:function(response)
+        {
+          result = response
+          console.log("Searched for ");
+          // console.log(JSON.stringify(result))
+        },
+        error : function(xhr, status, error)
+        {
+          console.log("Status of error message" + status + "Error is" + error);
+        } 
+    });
+    stringData = JSON.stringify(result).replace("index.html:367:23", "");
+    parsedData = JSON.parse(stringData);
+
+    artist = getName(stringData)
+    console.log("artist " + artist)
+    // artist, trackTitle = getName(stringData)
+    // console.log(artist, trackTitle)
+
+    return artist
+  }
+
+
+
   function createNewPlaylist(token, userId, title) {
       var url = "https://api.spotify.com/v1/users/" + userId + "/playlists";
       var result;
@@ -417,7 +516,7 @@
         {
           result = response
           console.log("Searched for " + term);
-          console.log(JSON.stringify(result))
+          // console.log(JSON.stringify(result))
         },
         error : function(xhr, status, error)
         {
@@ -437,8 +536,8 @@
 
   function addSongToPlaylist(token, playlistId, songId) {
     var url = "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks?uris=spotify:track:" + songId
-    console.log(songId)
-    https://open.spotify.com/track/65a2uxQevvKhIvhJ3r0mzh?si=235f0207163d414c
+    console.log("Song ID" + songId)
+    // https://open.spotify.com/track/65a2uxQevvKhIvhJ3r0mzh?si=235f0207163d414c
     var result;
 
     var data = $.ajax({
@@ -483,12 +582,25 @@
     var txt = document.getElementById("outputText").value;
     lines = txt.split("\n");
 
+    var resultSpotify = ""
+
     for (i in lines) {
       songId = searchSongs(token, lines[i]);
       if (songId != false) {
+        artist = getTrack(token, songId)
+        resultSpotify += "<br>" + artist
         addSongToPlaylist(token, playlistId, songId)
+      } else {
+        resultSpotify += "<br>"
       }
+
     }
+
+    txt = txt.replaceAll("\n", "<br>");
+    resultSpotify = resultSpotify.replace("<br>", "");
+    document.getElementById("resultText").innerHTML = "<h5 class=\"title is-5\">Text</h5> "+ txt;
+    document.getElementById("resultSpotify").innerHTML = "<h5 class=\"title is-5\">Spotify</h5> "+ resultSpotify;
+    
   }); 
 
 </script>
