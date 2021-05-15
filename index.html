@@ -395,11 +395,12 @@
             success:function(response)
             {
               result = response;
-              console.log("Success!!" + JSON.stringify(response));
+              console.log("New playlist created");
+              // console.log("Success!!" + JSON.stringify(response));
             },
             error : function(xhr, status, error)
             {
-                console.log("Status of error message" + status + "Error is" + error);
+              console.log("Status of error message" + status + "Error is" + error);
             } 
         });
         stringData = JSON.stringify(result).replace("index.html:367:23", "");
@@ -424,20 +425,51 @@
           success:function(response)
           {
             result = response
-              console.log("Success!!" + JSON.stringify(response));
+            console.log("Searched for " + term);
+            console.log(JSON.stringify(result))
           },
           error : function(xhr, status, error)
           {
-              console.log("Status of error message" + status + "Error is" + error);
+            console.log("Status of error message" + status + "Error is" + error);
           } 
       });
       stringData = JSON.stringify(result).replace("index.html:367:23", "");
       parsedData = JSON.parse(stringData);
 
       if (parsedData.tracks.total > 0) {
-        return getId(stringData);
+        var myRe = /spotify:track:(.*?)"/;
+        var myArray = myRe.exec(stringData);
+        return myArray['1'];
       }
-      return ""
+      return false
+    }
+
+    function addSongToPlaylist(token, playlistId, songId) {
+      var url = "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks?uris=spotify:track:" + songId
+      console.log(songId)
+      https://open.spotify.com/track/65a2uxQevvKhIvhJ3r0mzh?si=235f0207163d414c
+      var result;
+
+      var data = $.ajax({
+          url: url,
+          type: 'post',
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+          },
+          dataType: 'json',
+          async: false, 
+          success:function(response)
+          {
+            result = response
+            console.log("Successfully added track!");
+          },
+          error : function(xhr, status, error)
+          {
+            console.log("Status of error message" + status + "Error is" + error);
+          } 
+      });
     }
 
 
@@ -455,25 +487,17 @@
         playlistTitle = dateTime;
       }
 
-      // createNewPlaylist(token, userId, playlistTitle);
+      playlistId = createNewPlaylist(token, userId, playlistTitle);
 
       var txt = document.getElementById("outputText").value;
       lines = txt.split("\n");
 
-      for (line in lines) {
-        songId = searchSongs(token, line);
-        
+      for (i in lines) {
+        songId = searchSongs(token, lines[i]);
+        if (songId != false) {
+          addSongToPlaylist(token, playlistId, songId)
+        }
       }
-
-      alert(lines.length);
-
-        
-
-
-
-
-
-
     }); 
 
 
