@@ -146,11 +146,35 @@
             <!-- <div class="control mb-2"> -->
               <textarea id="outputText" class="textarea mb-5" readonly rows=18></textarea>
             <!-- </div> -->
+<!-- 
+            <div class="field has-addons">
+              <p class="control">
+                <a class="button is-static">
+                  Playlist Title
+                </a>
+              </p>
+              <p class="control is-expanded">
+                <input class="input" type="text" placeholder="New Playlist">
+              </p>
+            </div> -->
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Playlist title</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input id="playlistTitle" class="input is-info" type="text" placeholder="e.g. New Playlist">
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <!-- get user id -->
             <div class="field has-addons">
               <div class="control is-expanded">
-                <input id="getUserId" class="input" type="text" placeholder="e.g. Artist">
+                <input id="userId" class="input" type="text" placeholder="">
               </div>
               <div class="control">
                 <button onclick="window.open('https://www.spotify.com/account/?utm_source=spotify&utm_medium=menu&utm_campaign=your_account','_blank')" class="button is-info" type="button">
@@ -162,7 +186,7 @@
             <!-- get token -->
             <div class="field has-addons">
               <div class="control is-expanded">
-                <input id="getToken" class="input" type="text" placeholder="BQBmM7XYpqQ3KwB7YQnv1ntLQxd-k3g3qiZcdeVjDsabPyD0Mg7HOjr-UUEcDVmwFPyR_5E9httGp6XUALcH4qygaDPKOg_q0lkyDapk_o0l0_UCMG6qFqX5KLV-Of_YCG9mOT-3XmqWy_IB4hT3mmW4UxfZCbKWc1KYUVr0AtzSARFyRN0unF5Xm268fct7dmFf8A">
+                <input id="token" class="input" type="text" placeholder="BQBmM7XYpqQ3KwB7YQnv1ntLQxd-k3g3qiZcdeVjDsabPyD0Mg7HOjr-UUEcDVmwFPyR_5E9httGp6XUALcH4qygaDPKOg_q0lkyDapk_o0l0_UCMG6qFqX5KLV-Of_YCG9mOT-3XmqWy_IB4hT3mmW4UxfZCbKWc1KYUVr0AtzSARFyRN0unF5Xm268fct7dmFf8A">
               </div>
               <div class="control">
               	<!-- https://developer.spotify.com/console/post-playlist-tracks/?playlist_id=&position=&uris= -->
@@ -175,7 +199,7 @@
 
             <!-- spotify -->
             <div class="buttons is-right mt-4">
-              <button id="generatePlaylist" class="button is-success">Generate Spotify Playlist</button>
+              <button id="generatePlaylist" class="button is-success is-medium is-outlined">Generate Spotify Playlist</button>
             </div>
 
           </div>
@@ -342,15 +366,16 @@
     // });
     // var data = {};
 
-    // var token = document.getElementById("getToken").value;
-    // var user_id = document.getElementById("getUserId").value;
+    // var token = document.getElementById("token").value;
+    // var user_id = document.getElementById("userId").value;
 
     // var url = "https://api.spotify.com/v1/users/" + user_id + "/playlists"
 
-    function getId() {
+    function getId(string) {
       var myRe = /"id":"(.*?)"/;
-      var myArray = myRe.exec(songs);
-      console.log(myArray['1']);
+      var myArray = myRe.exec(string);
+      // console.log(myArray['1']);
+      return myArray['1']
     }
 
     function createNewPlaylist(token, userId, title="created new playlist") {
@@ -382,7 +407,8 @@
         });
         stringData = JSON.stringify(result).replace("index.html:367:23", "");
         parsedData = JSON.parse(stringData);
-        alert(stringData);
+        // alert(stringData);
+        return getId(stringData)
     }
 
     function searchSongs(token, term) {
@@ -420,20 +446,24 @@
 
       if (parsedData.tracks.total > 0) {
         // console.log(stringData)
-        return stringData
+        return getId(stringData)
       }
       return ""
     }
 
 
     $("#generatePlaylist").click(function(){
-      var token = document.getElementById("getToken").value;
-      var userId = document.getElementById("getUserId").value;
+      var token = document.getElementById("token").value;
+      var userId = document.getElementById("userId").value;
+      var playlistTitle = document.getElementById("playlistTitle").value;
 
       var today = new Date();
       var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+      var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      var dateTime = date + ' ' + time;
 
       createNewPlaylist(token, userId)
+      
 
       // var songs = searchSongs("ru yan");
 
@@ -455,8 +485,8 @@
 
 
     // $("#generatePlaylist").click(function(){
-    //     var token = document.getElementById("getToken").value;
-    //     var user_id = document.getElementById("getUserId").value;
+    //     var token = document.getElementById("token").value;
+    //     var user_id = document.getElementById("userId").value;
 
     //     var url = "https://api.spotify.com/v1/users/" + user_id + "/playlists"
 
