@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Spotify Playlist from Text</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
-    <script type="text/javascript" src="spotify-web-api.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   </head>
   <body>
@@ -216,7 +215,7 @@
   let inputTa = document.getElementById("inputText");
   inputTa.onpaste = pasteText;
 
-  function toOutput(txt=document.getElementById("inputText").value) {
+  function toOutput(txt=document.getElementById("inputText").value) { //display on output text area
     document.getElementById("outputText").value = txt;
     currOutputText = document.getElementById("outputText").value;
   }
@@ -378,7 +377,7 @@
       return myArray['1']
     }
 
-    function createNewPlaylist(token, userId, title="created new playlist") {
+    function createNewPlaylist(token, userId, title) {
         var url = "https://api.spotify.com/v1/users/" + userId + "/playlists";
         var result;
 
@@ -396,9 +395,7 @@
             success:function(response)
             {
               result = response;
-                // console.log("Success!!" + response.responseText);
-                // var parsed_data = JSON.parse(response.responseText);
-                // console.log(parsed_data.success);
+              console.log("Success!!" + JSON.stringify(response));
             },
             error : function(xhr, status, error)
             {
@@ -407,7 +404,6 @@
         });
         stringData = JSON.stringify(result).replace("index.html:367:23", "");
         parsedData = JSON.parse(stringData);
-        // alert(stringData);
         return getId(stringData)
     }
 
@@ -428,11 +424,7 @@
           success:function(response)
           {
             result = response
-              // console.log("Success!!" + JSON.stringify(response));
-              // stringData = JSON.stringify(response).replace("index.html:367:23", "");
-              // parsedData = JSON.parse(stringData);
-              // console.log(parsedData.tracks.total);
-
+              console.log("Success!!" + JSON.stringify(response));
           },
           error : function(xhr, status, error)
           {
@@ -441,12 +433,9 @@
       });
       stringData = JSON.stringify(result).replace("index.html:367:23", "");
       parsedData = JSON.parse(stringData);
-      // alert(stringData);
-
 
       if (parsedData.tracks.total > 0) {
-        // console.log(stringData)
-        return getId(stringData)
+        return getId(stringData);
       }
       return ""
     }
@@ -462,14 +451,24 @@
       var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
       var dateTime = date + ' ' + time;
 
-      createNewPlaylist(token, userId)
-      
+      if (playlistTitle.length == 0) {
+        playlistTitle = dateTime;
+      }
 
-      // var songs = searchSongs("ru yan");
+      // createNewPlaylist(token, userId, playlistTitle);
 
-      // var myRe = /"id":"(.*?)"/;
-      // var myArray = myRe.exec(songs);
-      // console.log(myArray['1'])
+      var txt = document.getElementById("outputText").value;
+      lines = txt.split("\n");
+
+      for (line in lines) {
+        songId = searchSongs(token, line);
+        
+      }
+
+      alert(lines.length);
+
+        
+
 
 
 
