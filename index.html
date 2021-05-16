@@ -68,10 +68,10 @@
             <!-- replace text -->
             <div class="field has-addons">
               <div class="control is-expanded">
-                <input id="replaceTerm" class="input" type="text" placeholder="e.g. Artist">
+                <input id="replaceTerm" class="input" type="text" placeholder="">
               </div>
               <div class="control">
-                <button onclick="replaceText()" class="button is-info">
+                <button onclick="replaceTerm()" class="button is-info">
                   Replace
                 </button>
               </div>
@@ -90,16 +90,16 @@
             </div>
 
             <!-- composer -->
-            <div class="field has-addons">
+<!--             <div class="field has-addons">
               <div class="control is-expanded">
-                <input id="addTerm" class="input" type="text" placeholder="e.g. Artist">
+                <input id="inputPattern" class="input" type="text" placeholder="e.g. , or《》">
               </div>
               <div class="control">
-                <button onclick="addTerm()" class="button is-info">
-                  Add to every line
+                <button onclick="extractByComposer()" class="button is-info">
+                  Many tracks one artist
                 </button>
               </div>
-            </div>
+            </div> -->
 
             <div class="columns">
               <div class="column is-one-fifth">
@@ -157,10 +157,10 @@
 
             <!-- paste and clear -->
             <div id="regexbtn" class="buttons is-right">
+              <button class="button is-light" onclick="extractByComposer()">Many tracks one artist</button>
               <button class="button" onclick="pasteText()">Paste Again</button>
               <button class="button is-danger is-left" onclick="clearText()">Clear</button>
             </div>
-
           </div>
 
 
@@ -169,7 +169,7 @@
           <div class="column is-half">
             <!-- outputText text area -->
             <!-- <div class="control mb-2"> -->
-            <textarea id="outputText" class="textarea mb-5" readonly rows=18></textarea>
+            <textarea id="outputText" class="textarea mb-5" rows=18></textarea>
             <!-- </div> -->
 <!-- 
             <div class="field has-addons">
@@ -255,18 +255,14 @@
           </div>
         </div>
       </div>
-
-
-
     </section>
-
   </body>
 </html>
 
 
 
 <script>
-  // Initila
+  // Initialise
   let inputTa = document.getElementById("inputText");
   inputTa.onpaste = pasteText;
 
@@ -300,7 +296,7 @@
     toOutput("");
   }
 
-  function replaceText() {
+  function replaceTerm() {
     var term = document.getElementById("replaceTerm").value;
     var txt = document.getElementById("outputText").value;
     txt = txt.replaceAll(term, "");
@@ -327,7 +323,7 @@
 
   function removeSymbol() {
     var txt = document.getElementById("outputText").value;
-    txt = txt.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, ' ')
+    txt = txt.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/《》<>]/gi, ' ')
 
     toOutput(txt);
   }
@@ -345,6 +341,28 @@
     txt = term + " " + txt.replaceAll("\n", "\n" + term + " ")
 
     toOutput(txt);
+  }
+
+  function extractByComposer() {
+    removeSymbol();
+    removeLine();
+    var txt = document.getElementById("outputText").value;
+    var pattern = document.getElementById("inputPattern");
+    txt = txt.split("\n")
+
+    var result = ""
+
+    for (i in txt) {
+      line = txt[i].trim()
+      tracks = line.split(" ")
+
+      artist = tracks.pop()
+
+      for (j in tracks) {
+        result += artist + " " + tracks[j] + "\n"
+      }
+    }
+    toOutput(result);
   }
 
 
@@ -392,18 +410,18 @@
       txt = currOutputText;
     }
 
-    var separator = " "
+    var inputPattern = " "
     if (document.getElementById(tabRadioId).checked) {
-      separator = "\t"
+      inputPattern = "\t"
     }
-    // alert(separator)
+    // alert(inputPattern)
 
     lines = txt.match(/[^\r\n]+/g);
     // alert(checkboxesChecked);
     var outputText = "";
     for (var i=0; i<lines.length; i++) {
       line = lines[i].trim()
-      line = line.split(separator);
+      line = line.split(inputPattern);
       var temp = "";
       for (var j=0; j<checkboxesChecked.length; j++) {
         temp = temp + " " + line[checkboxesChecked[j]]
@@ -417,9 +435,6 @@
       toOutput(outputText);
     }
   }
-
-
-
 
 
   // Regex
@@ -470,7 +485,7 @@
         console.log("Searched for ");
         // console.log(JSON.stringify(result))
       },
-      error : function(xhr, status, error)
+      error: function(xhr, status, error)
       {
         console.log("Status of error message" + status + "Error is" + error);
       } 
@@ -507,7 +522,7 @@
         console.log("New playlist created");
         // console.log("Success!!" + JSON.stringify(response));
       },
-      error : function(xhr, status, error)
+      error: function(xhr, status, error)
       {
         console.log("Status of error message" + status + "Error is" + error);
       }
@@ -537,7 +552,7 @@
         console.log("Searched for " + term);
         // console.log(JSON.stringify(result))
       },
-      error : function(xhr, status, error)
+      error: function(xhr, status, error)
       {
         console.log("Status of error message" + status + "Error is" + error);
       }
@@ -573,7 +588,7 @@
         result = response
         console.log("Successfully added track!");
       },
-      error : function(xhr, status, error)
+      error: function(xhr, status, error)
       {
         console.log("Status of error message" + status + "Error is" + error);
       }
