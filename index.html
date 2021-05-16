@@ -83,7 +83,19 @@
                 <input id="addTerm" class="input" type="text" placeholder="e.g. Artist">
               </div>
               <div class="control">
-                <button onclick="addText()" class="button is-info">
+                <button onclick="addTerm()" class="button is-info">
+                  Add to every line
+                </button>
+              </div>
+            </div>
+
+            <!-- composer -->
+            <div class="field has-addons">
+              <div class="control is-expanded">
+                <input id="addTerm" class="input" type="text" placeholder="e.g. Artist">
+              </div>
+              <div class="control">
+                <button onclick="addTerm()" class="button is-info">
                   Add to every line
                 </button>
               </div>
@@ -94,16 +106,17 @@
                 <p class="">Remove</p>
               </div>
 
-				<div class="column is-right">
-				<!-- buttons -->
-				<div id="regexbtn" class="buttons is-right">
-				  <button class="button" onclick="removeLine()">empty lines</button>
-				  <button class="button" onclick="removeNumber()">numbers</button>
-				  <button class="button" onclick="removeSymbol()">symbols</button>
-				  <button class="button" onclick="removeAll()">all</button>
-				</div>
-				</div>
-	        </div>	
+
+      				<div class="column is-right">
+        				<!-- buttons -->
+        				<div id="regexbtn" class="buttons is-right">
+        				  <button class="button" onclick="removeLine()">empty lines</button>
+        				  <button class="button" onclick="removeNumber()">numbers</button>
+        				  <button class="button" onclick="removeSymbol()">symbols</button>
+        				  <button class="button" onclick="removeAll()">all</button>
+        				</div>
+      				</div>
+  	        </div>	
 
             <!-- split output -->
             <div class="columns mt-2">
@@ -123,6 +136,7 @@
                   </label>
                 </div>
               </div>
+
               <!-- checkbox -->
               <div class="column">
                 <label class="checkbox"><input type="checkbox" name="cb-out" value="0">1</label>
@@ -200,15 +214,13 @@
                 <input id="token" class="input" type="text" placeholder="BQBmM7XYpqQ3KwB7YQnv1ntLQxd-k3g3qiZcdeVjDsabPyD0Mg7HOjr-UUEcDVmwFPyR_5E9httGp6XUALcH4qygaDPKOg_q0lkyDapk_o0l0_UCMG6qFqX5KLV-Of_YCG9mOT-3XmqWy_IB4hT3mmW4UxfZCbKWc1KYUVr0AtzSARFyRN0unF5Xm268fct7dmFf8A">
               </div>
               <div class="control">
-              	<!-- https://developer.spotify.com/console/post-playlist-tracks/?playlist_id=&position=&uris= -->
-              	<!-- window.open('http://google.com','_blank') -->
                 <button onclick="window.open('https://developer.spotify.com/console/post-playlist-tracks/?playlist_id=&position=&uris=','_blank')" class="button is-info" type="button">
                   Get Token
                 </button>
               </div>
             </div>
 
-            <!-- spotify -->
+            <!-- spotify generate playlist-->
             <div class="buttons is-right mt-4">
               <button id="generatePlaylist" class="button is-success is-medium is-outlined">Generate Spotify Playlist</button>
             </div>
@@ -222,21 +234,23 @@
 
 
     <section class="section">
-      <div class="columns">
-        <div class="tile is-3"></div>
+      <div class="container">
+        <div class="columns">
+          <!-- <div class="tile is-3"></div> -->
 
-        <div class="tile is-ancestor">
-          <div class="tile is-4 is-parent">
-            <div id="resultText" class="tile is-child box">
-<!--               <p class="title">One</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.</p> -->
+          <div class="tile is-ancestor">
+            <div class="tile is-half is-parent">
+              <div id="resultText" class="tile is-child box">
+  <!--               <p class="title">One</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.</p> -->
+              </div>
+
             </div>
-
-          </div>
-          <div class="tile is-6 is-parent">
-            <div id="resultSpotify" class="tile is-child box">
-<!--               <p class="title">Three</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam semper diam at erat pulvinar, at pulvinar felis blandit. Vestibulum volutpat tellus diam, consequat gravida libero rhoncus ut. Morbi maximus, leo sit amet vehicula eleifend, nunc dui porta orci, quis semper odio felis ut quam.</p> -->
+            <div class="tile is-half is-parent">
+              <div id="resultSpotify" class="tile is-child box">
+  <!--               <p class="title">Three</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam semper diam at erat pulvinar, at pulvinar felis blandit. Vestibulum volutpat tellus diam, consequat gravida libero rhoncus ut. Morbi maximus, leo sit amet vehicula eleifend, nunc dui porta orci, quis semper odio felis ut quam.</p> -->
+              </div>
             </div>
           </div>
         </div>
@@ -252,10 +266,12 @@
 
 
 <script>
-  // Text Processing
+  // Initila
   let inputTa = document.getElementById("inputText");
   inputTa.onpaste = pasteText;
 
+
+  // Text Processing
   function toOutput(txt=document.getElementById("inputText").value) { //display on output text area
     document.getElementById("outputText").value = txt;
     currOutputText = document.getElementById("outputText").value;
@@ -273,10 +289,6 @@
       let txt = document.getElementById("inputText").value;
       toOutput(txt);
     }
-
-    // alert(txt);
-    //setTimeout(function(){ alert("Hello"); }, 3000);
-    // toOutput(txt);
   }
 
   function clearText() {
@@ -301,7 +313,7 @@
     txt = txt.replaceAll("\n\n", '\n');
     // txt = txt.replace(/^\s*[\r<br>]/g, '');
     // txt = txt.replace(/\t+/g, ' ');
-    txt = txt.replace(/  +/g, ' ');
+    txt = txt.replaceAll(/  +/g, ' ');
 
     toOutput(txt);
   }
@@ -326,7 +338,7 @@
   	removeSymbol()
   }
 
-  function addText() {
+  function addTerm() {
     var txt = document.getElementById("outputText").value;
     var term = document.getElementById("addTerm").value;
 
@@ -409,16 +421,16 @@
 
 
 
-  // Spotify API
 
-  function getId(string) {
+  // Regex
+  function regId(string) {
     var myRe = /"id":"(.*?)"/;
     var myArray = myRe.exec(string);
     // console.log(myArray['1']);
     return myArray['1']
   }
 
-  function getName(string) {
+  function regName(string) {
     var myRe = /"name":"(.*?)"/g;
     var myArray = [...string.matchAll(myRe)];
     // var myArray = myRe.exec(string);
@@ -429,99 +441,106 @@
     return [myArray[myArray.length-2], myArray[myArray.length-1]]
   }
 
-  function getTrack(token, songId) {
-    var url = "https://api.spotify.com/v1/tracks/" + songId;
+  function regTrack(string) {
+    var myRe = /spotify:track:(.*?)"/;
+    var myArray = myRe.exec(stringData);
+    return myArray['1'];
+  }
+
+
+  // Spotify API --------------------------------
+
+  function getTrack(token, trackId) {
+    var url = "https://api.spotify.com/v1/tracks/" + trackId;
     var result;
 
     var data = $.ajax({
-        url: url,
-        type: 'get',
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + token
-        },
-        dataType: 'json',
-        async: false, 
-        success:function(response)
-        {
-          result = response
-          console.log("Searched for ");
-          // console.log(JSON.stringify(result))
-        },
-        error : function(xhr, status, error)
-        {
-          console.log("Status of error message" + status + "Error is" + error);
-        } 
+      url: url,
+      type: 'get',
+      headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token
+      },
+      dataType: 'json',
+      async: false, 
+      success:function(response)
+      {
+        result = response
+        console.log("Searched for ");
+        // console.log(JSON.stringify(result))
+      },
+      error : function(xhr, status, error)
+      {
+        console.log("Status of error message" + status + "Error is" + error);
+      } 
     });
     stringData = JSON.stringify(result).replace("index.html:367:23", "");
     parsedData = JSON.parse(stringData);
 
-    artist = getName(stringData)
-    console.log("artist " + artist)
-    // artist, trackTitle = getName(stringData)
+    trackInfo = regName(stringData)
+    console.log("Track Info " + trackInfo)
+    // artist, trackTitle = regName(stringData)
     // console.log(artist, trackTitle)
 
-    return artist
+    return trackInfo
   }
-
-
 
   function createNewPlaylist(token, userId, title) {
-      var url = "https://api.spotify.com/v1/users/" + userId + "/playlists";
-      var result;
+    var url = "https://api.spotify.com/v1/users/" + userId + "/playlists";
+    var result;
 
-      $.ajax({
-          url: url,
-          type: 'post',
-          data: "{\"name\":\"" + title + "\",\"description\":\"\",\"public\":false}",
-          headers: {
-              "Accept": "application/json",
-              "Content-Type": "application/json",
-              "Authorization": "Bearer " + token
-          },
-          dataType: 'json',
-          async: false, 
-          success:function(response)
-          {
-            result = response;
-            console.log("New playlist created");
-            // console.log("Success!!" + JSON.stringify(response));
-          },
-          error : function(xhr, status, error)
-          {
-            console.log("Status of error message" + status + "Error is" + error);
-          } 
-      });
-      stringData = JSON.stringify(result).replace("index.html:367:23", "");
-      parsedData = JSON.parse(stringData);
-      return getId(stringData)
+    $.ajax({
+      url: url,
+      type: 'post',
+      data: "{\"name\":\"" + title + "\",\"description\":\"\",\"public\":false}",
+      headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token
+      },
+      dataType: 'json',
+      async: false, 
+      success:function(response)
+      {
+        result = response;
+        console.log("New playlist created");
+        // console.log("Success!!" + JSON.stringify(response));
+      },
+      error : function(xhr, status, error)
+      {
+        console.log("Status of error message" + status + "Error is" + error);
+      }
+    });
+    stringData = JSON.stringify(result).replace("index.html:367:23", "");
+    parsedData = JSON.parse(stringData);
+    return regId(stringData)
   }
 
-  function searchSongs(token, term) {
+  function searchTracks(token, term) {
     var url = "https://api.spotify.com/v1/search?q="+ term +"&type=track";
     var result;
 
     var data = $.ajax({
-        url: url,
-        type: 'get',
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + token
-        },
-        dataType: 'json',
-        async: false, 
-        success:function(response)
-        {
-          result = response
-          console.log("Searched for " + term);
-          // console.log(JSON.stringify(result))
-        },
-        error : function(xhr, status, error)
-        {
-          console.log("Status of error message" + status + "Error is" + error);
-        } 
+      url: url,
+      type: 'get',
+      headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token
+      },
+      dataType: 'json',
+      async: false, 
+      success:function(response)
+      {
+        result = response
+        console.log("Searched for " + term);
+        // console.log(JSON.stringify(result))
+      },
+      error : function(xhr, status, error)
+      {
+        console.log("Status of error message" + status + "Error is" + error);
+      }
     });
     stringData = JSON.stringify(result).replace("index.html:367:23", "");
     parsedData = JSON.parse(stringData);
@@ -534,47 +553,49 @@
     return false
   }
 
-  function addSongToPlaylist(token, playlistId, songId) {
-    var url = "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks?uris=spotify:track:" + songId
-    console.log("Song ID" + songId)
-    // https://open.spotify.com/track/65a2uxQevvKhIvhJ3r0mzh?si=235f0207163d414c
+  function addSongToPlaylist(token, playlistId, trackId) {
+    var url = "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks?uris=spotify:track:" + trackId
+    console.log("Track ID" + trackId)
     var result;
 
     var data = $.ajax({
-        url: url,
-        type: 'post',
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + token
-        },
-        dataType: 'json',
-        async: false, 
-        success:function(response)
-        {
-          result = response
-          console.log("Successfully added track!");
-        },
-        error : function(xhr, status, error)
-        {
-          console.log("Status of error message" + status + "Error is" + error);
-        } 
+      url: url,
+      type: 'post',
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      },
+      dataType: 'json',
+      async: false, 
+      success:function(response)
+      {
+        result = response
+        console.log("Successfully added track!");
+      },
+      error : function(xhr, status, error)
+      {
+        console.log("Status of error message" + status + "Error is" + error);
+      }
     });
   }
 
+  function newPlaylistTitle() {
+    var today = new Date();
+    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date + ' ' + time;
+
+    return dateTime
+  }
 
   $("#generatePlaylist").click(function(){
     var token = document.getElementById("token").value;
     var userId = document.getElementById("userId").value;
     var playlistTitle = document.getElementById("playlistTitle").value;
 
-    var today = new Date();
-    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    var dateTime = date + ' ' + time;
-
     if (playlistTitle.length == 0) {
-      playlistTitle = dateTime;
+      playlistTitle = newPlaylistTitle();
     }
 
     playlistId = createNewPlaylist(token, userId, playlistTitle);
@@ -585,22 +606,20 @@
     var resultSpotify = ""
 
     for (i in lines) {
-      songId = searchSongs(token, lines[i]);
-      if (songId != false) {
-        artist = getTrack(token, songId)
+      trackId = searchTracks(token, lines[i]);
+      if (trackId != false) {
+        artist = getTrack(token, trackId)
         resultSpotify += "<br>" + artist
-        addSongToPlaylist(token, playlistId, songId)
+        addSongToPlaylist(token, playlistId, trackId)
       } else {
         resultSpotify += "<br>"
       }
-
     }
 
     txt = txt.replaceAll("\n", "<br>");
     resultSpotify = resultSpotify.replace("<br>", "");
     document.getElementById("resultText").innerHTML = "<h5 class=\"title is-5\">Text</h5> "+ txt;
     document.getElementById("resultSpotify").innerHTML = "<h5 class=\"title is-5\">Spotify</h5> "+ resultSpotify;
-    
   }); 
 
 </script>
