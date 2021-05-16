@@ -314,9 +314,10 @@
 
   function removeLine() {
     var txt = document.getElementById("outputText").value;
-    txt = txt.replaceAll("\n\n", '\n');
+    // txt = txt.replaceAll("\n\n", '\n');
     // txt = txt.replace(/^\s*[\r<br>]/g, '');
-    // txt = txt.replace(/\t+/g, ' ');
+    txt = txt.replace(/^\s*$(?:\r\n?|\n)/gm, '');
+    txt = txt.replace(/\n*$/, '');
     txt = txt.replaceAll(/  +/g, ' ');
 
     toOutput(txt);
@@ -619,7 +620,7 @@
       playlistTitle = newPlaylistTitle();
     }
 
-    // playlistId = createNewPlaylist(token, userId, playlistTitle);
+    playlistId = createNewPlaylist(token, userId, playlistTitle);
 
     var txt = document.getElementById("outputText").value;
     lines = txt.split("\n");
@@ -634,7 +635,7 @@
       if (trackId != false) {
         artist = getTrack(token, trackId)
         resultSpotify += "<br>" + no + " " + artist
-        // addSongToPlaylist(token, playlistId, trackId)
+        addSongToPlaylist(token, playlistId, trackId)
       } else {
         resultSpotify += "<br>" + no
       }
