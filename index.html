@@ -163,9 +163,6 @@
             </div>
           </div>
 
-
-
-
           <div class="column is-half">
             <!-- outputText text area -->
             <!-- <div class="control mb-2"> -->
@@ -482,7 +479,7 @@
       success:function(response)
       {
         result = response
-        console.log("Searched for ");
+        // console.log("Get track info");
         // console.log(JSON.stringify(result))
       },
       error: function(xhr, status, error)
@@ -549,7 +546,7 @@
       success:function(response)
       {
         result = response
-        console.log("Searched for " + term);
+        console.log("Search for " + term);
         // console.log(JSON.stringify(result))
       },
       error: function(xhr, status, error)
@@ -620,14 +617,14 @@
 
     var resultSpotify = ""
 
-    for (i in lines) {
-      trackId = searchTracks(token, lines[i]);
+    for (k in lines) {
+      trackId = searchTracks(token, lines[k]);
       if (trackId != false) {
         artist = getTrack(token, trackId)
-        resultSpotify += "<br>" + artist
+        resultSpotify += "<br>" + k + " " + artist
         addSongToPlaylist(token, playlistId, trackId)
       } else {
-        resultSpotify += "<br>"
+        resultSpotify += "<br>" + k
       }
     }
 
