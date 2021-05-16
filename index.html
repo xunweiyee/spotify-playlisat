@@ -225,6 +225,7 @@
             <div class="buttons is-right mt-4">
               <button id="generatePlaylist" class="button is-success is-medium is-outlined">Generate Spotify Playlist</button>
             </div>
+            <progress id="progressBar" class="progress is-small is-success" value="0" max="100"></progress>
 
             <!-- <textarea id="outputText" class="textarea mb-5" readonly rows=10></textarea> -->
 
@@ -618,12 +619,14 @@
       playlistTitle = newPlaylistTitle();
     }
 
-    playlistId = createNewPlaylist(token, userId, playlistTitle);
+    // playlistId = createNewPlaylist(token, userId, playlistTitle);
 
     var txt = document.getElementById("outputText").value;
     lines = txt.split("\n");
 
     var resultSpotify = ""
+
+    var bar = document.getElementById("progressBar");
 
     for (k in lines) {
       trackId = searchTracks(token, lines[k]);
@@ -631,10 +634,11 @@
       if (trackId != false) {
         artist = getTrack(token, trackId)
         resultSpotify += "<br>" + no + " " + artist
-        addSongToPlaylist(token, playlistId, trackId)
+        // addSongToPlaylist(token, playlistId, trackId)
       } else {
         resultSpotify += "<br>" + no
       }
+      bar.setAttribute("value", parseInt(no / lines.length * 100));
     }
 
     txt = txt.replaceAll("\n", "<br>");
