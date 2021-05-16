@@ -157,7 +157,7 @@
 
             <!-- paste and clear -->
             <div id="regexbtn" class="buttons is-right">
-              <button class="button" onclick="extractByComposer()">Many tracks one artist</button>
+              <button class="button is-light" onclick="extractByComposer()">Many tracks one artist</button>
               <button class="button" onclick="pasteText()">Paste Again</button>
               <button class="button is-danger is-left" onclick="clearText()">Clear</button>
             </div>
@@ -324,7 +324,7 @@
 
   function removeSymbol() {
     var txt = document.getElementById("outputText").value;
-    txt = txt.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/《》<>]/gi, ' ')
+    txt = txt.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, ' ')
 
     toOutput(txt);
   }
@@ -465,7 +465,6 @@
 
 
   // Spotify API --------------------------------
-
   function getTrack(token, trackId) {
     var url = "https://api.spotify.com/v1/tracks/" + trackId;
     var result;
