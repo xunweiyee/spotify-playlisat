@@ -157,7 +157,8 @@
 
             <!-- paste and clear -->
             <div id="regexbtn" class="buttons is-right">
-              <button class="button is-light" onclick="extractByComposer()">Many tracks one artist</button>
+              <button class="button is-light" onclick="extractByComposer('first')">artist : tracks</button>
+              <button class="button is-light" onclick="extractByComposer('last')">tracks : artist</button>
               <button class="button" onclick="pasteText()">Paste Again</button>
               <button class="button is-danger is-left" onclick="clearText()">Clear</button>
             </div>
@@ -352,7 +353,7 @@
     toOutput(txt);
   }
 
-  function extractByComposer() {
+  function extractByComposer(position) {
     removeSymbol();
     removeLine();
     var txt = document.getElementById("outputText").value;
@@ -365,7 +366,13 @@
       line = txt[i].trim()
       tracks = line.split(" ")
 
-      artist = tracks.pop()
+      if (position == 'last') {
+        artist = tracks.pop()
+      } else {
+        artist = tracks.shift()
+      }
+
+      
 
       for (j in tracks) {
         result += artist + " " + tracks[j] + "\n"
